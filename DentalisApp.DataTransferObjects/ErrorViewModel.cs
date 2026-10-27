@@ -1,4 +1,4 @@
-namespace DentalisApp.Models
+namespace DentalisApp.DataTransferObjects
 {
     public class ErrorViewModel
     {
