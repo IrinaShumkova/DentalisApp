@@ -11,10 +11,7 @@
         [Column(TypeName = AppointmentDateTimeSQlType)]
         public DateTime VisitDate { get; set; }
 
-        [ForeignKey(nameof(ToothNumber))]
-        public int ToothNumberId { get; set; }
-        public ToothNumbersAll ToothNumber { get; set; } = null!;
-
+    
         [MaxLength(AppointmentDiagnosisMaxLength)]
         public string? Diagnosis { get; set; }
 
@@ -34,7 +31,8 @@
         public int PatientId { get; set; }
         public virtual Patient Patient { get; set; } = null!;
 
-
+        public virtual ICollection<AppointmentTooth> AppointmentTeeth { get; set; }
+        = new List<AppointmentTooth>();
 
     }
 }

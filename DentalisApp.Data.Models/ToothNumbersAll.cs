@@ -15,5 +15,8 @@ namespace DentalisApp.Data.Models
         public int ToothNumber { get; set; }
 
         public string ToothName { get; set; } = null!;
+
+        public virtual ICollection<AppointmentTooth> AppointmentTeeth { get; set; }
+       = new List<AppointmentTooth>();
     }
 }

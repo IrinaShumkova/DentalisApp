@@ -47,9 +47,6 @@ namespace DentalisApp.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ToothNumberId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("VisitDate")
                         .HasColumnType("smalldatetime");
 
@@ -57,9 +54,22 @@ namespace DentalisApp.Data.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("ToothNumberId");
-
                     b.ToTable("Appointments");
+                });
+
+            modelBuilder.Entity("DentalisApp.Data.Models.AppointmentTooth", b =>
+                {
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ToothNumbersAllId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppointmentId", "ToothNumbersAllId");
+
+                    b.HasIndex("ToothNumbersAllId");
+
+                    b.ToTable("AppointmentsTeeth");
                 });
 
             modelBuilder.Entity("DentalisApp.Data.Models.Invoice", b =>
@@ -603,21 +613,32 @@ namespace DentalisApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DentalisApp.Data.Models.ToothNumbersAll", "ToothNumber")
-                        .WithMany()
-                        .HasForeignKey("ToothNumberId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("DentalisApp.Data.Models.AppointmentTooth", b =>
+                {
+                    b.HasOne("DentalisApp.Data.Models.Appointment", "Appointment")
+                        .WithMany("AppointmentTeeth")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Patient");
+                    b.HasOne("DentalisApp.Data.Models.ToothNumbersAll", "ToothNumbersAll")
+                        .WithMany("AppointmentTeeth")
+                        .HasForeignKey("ToothNumbersAllId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.Navigation("ToothNumber");
+                    b.Navigation("Appointment");
+
+                    b.Navigation("ToothNumbersAll");
                 });
 
             modelBuilder.Entity("DentalisApp.Data.Models.Invoice", b =>
                 {
                     b.HasOne("DentalisApp.Data.Models.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("Invoices")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -698,6 +719,11 @@ namespace DentalisApp.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DentalisApp.Data.Models.Appointment", b =>
+                {
+                    b.Navigation("AppointmentTeeth");
+                });
+
             modelBuilder.Entity("DentalisApp.Data.Models.Invoice", b =>
                 {
                     b.Navigation("InvoiceItems");
@@ -706,6 +732,13 @@ namespace DentalisApp.Data.Migrations
             modelBuilder.Entity("DentalisApp.Data.Models.Patient", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("DentalisApp.Data.Models.ToothNumbersAll", b =>
+                {
+                    b.Navigation("AppointmentTeeth");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,7 @@
 ﻿namespace DentalisApp.Data.Models
 {
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc.Formatters;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using static DentalisApp.GCommon.Constants.EntityValidation;
@@ -52,5 +53,8 @@
 
         public virtual ICollection<Appointment> Appointments { get; set; }
         = new List<Appointment>();
+
+        public virtual ICollection<Invoice> Invoices { get; set; }
+        = new List<Invoice>();
     }
 }

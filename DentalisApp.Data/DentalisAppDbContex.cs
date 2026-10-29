@@ -17,11 +17,27 @@ namespace DentalisApp.Data
         public virtual DbSet<ToothNumbersAll> ToothNumbersAlls { get; set; } = null!;
         public virtual DbSet<Invoice> Invoices { get; set; } = null!;
         public virtual DbSet<InvoiceItem> InvoiceItems { get; set; } = null!;
+        public virtual DbSet<AppointmentTooth> AppointmentsTeeth { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AppointmentTooth>()
+             .HasKey(at => new { at.AppointmentId, at.ToothNumbersAllId });
+
+            modelBuilder.Entity<AppointmentTooth>()
+               .HasOne(at => at.Appointment)
+               .WithMany(a => a.AppointmentTeeth)
+               .HasForeignKey(at => at.AppointmentId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<AppointmentTooth>()
+                .HasOne(at => at.ToothNumbersAll)
+                .WithMany(t => t.AppointmentTeeth)
+                .HasForeignKey(at => at.ToothNumbersAllId)
+                .OnDelete(DeleteBehavior.NoAction);
 
            modelBuilder.Entity<ToothNumbersAll>()
                 .HasData
