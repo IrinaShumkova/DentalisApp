@@ -1,41 +1,41 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using DentalisApp.Data;
 
-namespace DentalisApp.Areas.Identity.Pages.Account;
-
-public class LogoutModel : PageModel
+namespace DentalisApp.Areas.Identity.Pages.Account
 {
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly ILogger<LogoutModel> _logger;
-
-    public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
+    public class LogoutModel : PageModel
     {
-        _signInManager = signInManager;
-        _logger = logger;
+        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly ILogger<LogoutModel> logger;
+
+        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
+        {
+            this.signInManager = signInManager;
+            this.logger = logger;
+        }
+
+        public async Task<IActionResult> OnPost(string? returnUrl = null)
+        {
+            await signInManager.SignOutAsync();
+            logger.LogInformation("User logged out.");
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                // This needs to be a redirect so that the browser performs a new
+                // request and the identity for the user gets updated.
+                return RedirectToPage();
+            }
+        }
     }
 
-    public async Task<IActionResult> OnPost(string? returnUrl = null)
-    {
-        await _signInManager.SignOutAsync();
-        _logger.LogInformation("User logged out.");
-        if (returnUrl != null)
-        {
-            return LocalRedirect(returnUrl);
-        }
-        else
-        {
-            // This needs to be a redirect so that the browser performs a new
-            // request and the identity for the user gets updated.
-            return RedirectToPage();
-        }
-    }
 }
+

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DentalisApp.GCommon\DentalisApp.GCommon.csproj" />
+    <ProjectReference Include="..\DentalisApp.GCommon\DentalisApp.Common.csproj" />
   </ItemGroup>
 
 </Project>

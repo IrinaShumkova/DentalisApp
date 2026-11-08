@@ -19,7 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DentalisApp.Services.Core\DentalisApp.Services.Core.csproj" />
+    <ProjectReference Include="..\DentalisApp.Data.Models\DentalisApp.Data.Models.csproj" />
+    <ProjectReference Include="..\DentalisApp.Data\DentalisApp.Data.csproj" />
+    <ProjectReference Include="..\DentalisApp.Services.DTO\DentalisApp.Services.DTO.csproj" />
+    <ProjectReference Include="..\DentalisApp.Services\DentalisApp.Services.csproj" />
+    <ProjectReference Include="..\DentalisApp.Web.ViewModels\DentalisApp.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

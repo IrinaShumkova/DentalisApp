@@ -1,16 +1,19 @@
-using DentalisApp.DataTransferObjects;
+using DentalisApp.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using DentalisApp.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DentalisApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public HomeController()
         {
            
         }
 
+       [AllowAnonymous]
         public IActionResult Index()
         {
             return View();

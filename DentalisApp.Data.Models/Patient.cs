@@ -1,10 +1,9 @@
 ﻿namespace DentalisApp.Data.Models
 {
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc.Formatters;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using static DentalisApp.GCommon.Constants.EntityValidation;
+    using static DentalisApp.Common.Constants.EntityValidation;
     public class Patient
     {
         [Key]

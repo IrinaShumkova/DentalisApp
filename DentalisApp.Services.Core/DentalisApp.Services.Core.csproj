@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DentalisApp.DataTransferObjects\DentalisApp.DataTransferObjects.csproj" />
     <ProjectReference Include="..\DentalisApp.Data\DentalisApp.Data.csproj" />
-    <ProjectReference Include="..\DentalisApp.GCommon\DentalisApp.GCommon.csproj" />
+    <ProjectReference Include="..\DentalisApp.GCommon\DentalisApp.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

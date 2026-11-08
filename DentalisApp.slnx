@@ -1,8 +1,15 @@
 <Solution>
-  <Project Path="../../../../../../../../Softuni/MyApplication/DentalisApp/DentalisApp.Data.Models/DentalisApp.Data.Models.csproj" Id="1eb8f395-28a0-4766-baac-1707afac9188" />
-  <Project Path="../../../../../../../../Softuni/MyApplication/DentalisApp/DentalisApp.Data/DentalisApp.Data.csproj" Id="b0ff23e8-dac2-48a0-bea5-29e5e5e98201" />
-  <Project Path="../../../../../../../../Softuni/MyApplication/DentalisApp/DentalisApp.DataTransferObjects/DentalisApp.DataTransferObjects.csproj" Id="3d6e9ee8-7c8d-46fd-8690-074ea8e7c723" />
-  <Project Path="../../../../../../../../Softuni/MyApplication/DentalisApp/DentalisApp.GCommon/DentalisApp.GCommon.csproj" Id="42fae493-6df8-4555-886c-c139a93d74b7" />
-  <Project Path="../../../../../../../../Softuni/MyApplication/DentalisApp/DentalisApp.Services.Core/DentalisApp.Services.Core.csproj" Id="56d6ba28-8155-4093-87ea-7e7e927b8f61" />
-  <Project Path="../../../../../../../../Softuni/MyApplication/DentalisApp/DentalisApp/DentalisApp.Web.csproj" />
+  <Folder Name="/Data/">
+    <Project Path="DentalisApp.Data.Models/DentalisApp.Data.Models.csproj" Id="1eb8f395-28a0-4766-baac-1707afac9188" />
+    <Project Path="DentalisApp.Data/DentalisApp.Data.csproj" Id="b0ff23e8-dac2-48a0-bea5-29e5e5e98201" />
+  </Folder>
+  <Folder Name="/Services/">
+    <Project Path="DentalisApp.Services.DTO/DentalisApp.Services.DTO.csproj" Id="1f26897f-6ed1-434b-b837-dafba13ee548" />
+    <Project Path="DentalisApp.Services/DentalisApp.Services.csproj" Id="08e99c70-0850-4660-adef-6377062d37ed" />
+  </Folder>
+  <Folder Name="/Web/">
+    <Project Path="DentalisApp.Web.ViewModels/DentalisApp.Web.ViewModels.csproj" Id="70ec754e-94e5-418d-a40c-9292dd2a32ed" />
+    <Project Path="DentalisApp/DentalisApp.Web.csproj" />
+  </Folder>
+  <Project Path="DentalisApp.GCommon/DentalisApp.Common.csproj" Id="42fae493-6df8-4555-886c-c139a93d74b7" />
 </Solution>

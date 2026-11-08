@@ -1,4 +1,4 @@
-﻿namespace DentalisApp.GCommon.Constants
+﻿namespace DentalisApp.Common.Constants
 {
     public static class EntityValidation
     {

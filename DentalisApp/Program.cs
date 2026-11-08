@@ -1,4 +1,6 @@
 using DentalisApp.Data;
+using DentalisApp.Services;
+using DentalisApp.Services.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,15 +24,13 @@ namespace DentalisApp
             builder.Services.AddDefaultIdentity<IdentityUser>
             (options =>
             {
-                options.User.RequireUniqueEmail = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequiredLength = 3;
+                ConfigureIdentityOptions(options, builder.Configuration);
 
-                options.SignIn.RequireConfirmedAccount = false;
+
             })
                 .AddEntityFrameworkStores<DentalisAppDbContex>();
+
+            builder.Services.AddScoped<IPatientService, PatientService>();
 
             builder.Services.AddControllersWithViews();
 
@@ -63,6 +63,27 @@ namespace DentalisApp
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        private static void ConfigureIdentityOptions(IdentityOptions options, ConfigurationManager configuration)
+        {
+                options.Password.RequireDigit =
+                configuration.GetValue<bool>("Identity:Password:RequireDigit");
+                options.Password.RequireNonAlphanumeric =
+                configuration.GetValue<bool>("Identity:Password:RequireNonAlphanumeric");
+                options.Password.RequireUppercase =
+                configuration.GetValue<bool>("Identity:Password:RequireUppercase");
+                options.Password.RequireLowercase =
+                configuration.GetValue<bool>("Identity:Password:RequireLowercase");
+                options.Password.RequiredUniqueChars =
+                configuration.GetValue<int>("Identity:Password:RequiredUniqueChars");
+                options.Password.RequiredLength =
+                configuration.GetValue<int>("Identity:Password:RequiredLength");
+                options.User.RequireUniqueEmail =
+                configuration.GetValue<bool>("Identity:User:RequireUniqueEmail");
+                options.SignIn.RequireConfirmedAccount =
+                configuration.GetValue<bool>("Identity:Signin:RequireConfirmedAccount");
+            
         }
     }
 }
