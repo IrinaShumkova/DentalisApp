@@ -7,16 +7,11 @@ namespace DentalisApp.Web.Controllers
 [Authorize]
     public abstract class BaseController : Controller
     {
-       protected bool IsUserAuthenticated => User.Identity?.IsAuthenticated ?? false;
-       
-       protected string? GetUserId() 
-       {
-            if (!IsUserAuthenticated)
-            {
-                return null;
-            }
-            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        protected string? GetUserId()
+        {
+            return User?.FindFirstValue(ClaimTypes.NameIdentifier);
         }
-        
+        protected bool IsUserAuthenticated => User?.Identity?.IsAuthenticated ?? false;
+
     }
 }

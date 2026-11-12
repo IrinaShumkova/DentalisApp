@@ -1,5 +1,7 @@
 ﻿using DentalisApp.Services.Contracts;
 using DentalisApp.Services.DTO.Patient.Request;
+using DentalisApp.Services.DTO.Patient.Response;
+using DentalisApp.Web.ViewModels.Patient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +18,8 @@ using static Common.Constants.ApplicationConstants;
             this.patientService = patientService;
         }
 
-        public async Task<IActionResult> MyPatients()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
             string? userId = GetUserId();
             if (userId == null)
@@ -24,15 +27,28 @@ using static Common.Constants.ApplicationConstants;
                 return Unauthorized();
             }
 
-            GetPatientUserData requestData = new GetPatientUserData()
-            {
-                UserId = userId,
-                SkipEntries = DefaultSkipEntries,
-                TakeEntries = DefaultTakeEntries
-            };
+            IEnumerable<GetPatientUserResponseDTO> patientData 
+            = await patientService.GetPatientUserDataAsync(new GetPatientUserRequestDTO { UserId = userId });
 
-           // var patients = await patientService.GetPatientsAsync(requestData);
-            return View();
+            ICollection<PatientIndexViewModel> patientViewModels = new List<PatientIndexViewModel>();
+
+            foreach (GetPatientUserResponseDTO patient in patientData)
+            {
+                PatientIndexViewModel patientIndexViewModel=new PatientIndexViewModel
+                {
+                    Id = patient.Id,
+                    IsActive = patient.IsActive,
+                    EGN = patient.EGN,
+                    FirstName = patient.FirstName,
+                    SecondName = patient.SecondName,
+                    LastName = patient.LastName,
+                    Phone = patient.Phone,
+                    Email = patient.Email
+                };
+                patientViewModels.Add(patientIndexViewModel);
+            }
+           
+            return View(patientViewModels);
         }
     }
 }

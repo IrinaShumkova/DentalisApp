@@ -6,16 +6,15 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DentalisApp.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : BaseController
     {
-        public HomeController()
-        {
-           
-        }
-
-       [AllowAnonymous]
         public IActionResult Index()
         {
+            if (IsUserAuthenticated)
+            {
+                RedirectToAction("Index", "Patient");
+            }
             return View();
         }
 

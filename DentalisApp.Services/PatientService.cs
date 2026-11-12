@@ -14,23 +14,28 @@ namespace DentalisApp.Services
         {
             this.dbContex = dbContex;
         }
-        public async Task<IEnumerable<GetUserPatientResponseData>> GetPatientUserDataAsync(GetPatientUserData requestData)
+        public async Task<IEnumerable<GetPatientUserResponseDTO>> GetPatientUserDataAsync(GetPatientUserRequestDTO requestData)
         {
             if (string.IsNullOrWhiteSpace(requestData.UserId))
             {
                 throw new ArgumentException("UserId cannot be null or empty.", nameof(requestData.UserId));  
             }
 
-          IEnumerable<GetUserPatientResponseData> getUserPatientResponseDatas =  await dbContex.Patients
+          IEnumerable<GetPatientUserResponseDTO> getUserPatientResponseDatas =  await dbContex.Patients
                 .Where(p => p.DentistId.ToLower() == requestData.UserId.ToLower())
-                .Select(p => new GetUserPatientResponseData
+                .Select(p => new GetPatientUserResponseDTO
                 {
                     Id = p.Id,
-                    FirstName = p.FirstName
+                    IsActive = p.IsActive,
+                    FirstName = p.FirstName,
+                    SecondName = p.SecondName,
+                    LastName = p.LastName,
+                    EGN = p.EGN,
+                    Phone = p.Phone,
+                    Email = p.Email
+
                 })
                 .OrderBy(p => p.Id)
-                .Skip(requestData.SkipEntries)
-                .Take(requestData.TakeEntries)
                 .ToArrayAsync();
 
             return getUserPatientResponseDatas;
