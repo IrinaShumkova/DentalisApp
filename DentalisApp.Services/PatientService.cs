@@ -1,19 +1,55 @@
 ﻿using DentalisApp.Data;
+using DentalisApp.Data.Models;
 using DentalisApp.Services.Contracts;
 using DentalisApp.Services.DTO.Patient.Request;
 using DentalisApp.Services.DTO.Patient.Response;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DentalisApp.Services
 {
     public class PatientService : IPatientService
     {
         private readonly DentalisAppDbContex dbContex;
+        private readonly ILogger<PatientService> logger;
 
-        public PatientService(DentalisAppDbContex dbContex)
+        public PatientService(DentalisAppDbContex dbContex, ILogger<PatientService> logger)
         {
             this.dbContex = dbContex;
+            this.logger = logger;
         }
+
+        public async Task<bool> AddPatientAsync(AddNewPatientRequestDTO requestData)
+        {
+                Patient newPatient = new Patient
+                {
+                    EGN = requestData.EGN,
+                    FirstName = requestData.FirstName,
+                    SecondName = requestData.SecondName,
+                    LastName = requestData.LastName,
+                    Address = requestData.Address,
+                    Phone = requestData.Phone,
+                    Email = requestData.Email,
+                    Allergies = requestData.Allergies,
+                    MedicalHistory = requestData.MedicalHistory,
+                    Notes = requestData.Notes,
+                    DentistId = requestData.DentistId
+                };
+            try
+            {
+                await dbContex.Patients.AddAsync(newPatient);
+                await dbContex.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "An error occurred while adding a new patient.");
+            }
+      
+            return false;
+
+        }
+
         public async Task<IEnumerable<GetPatientUserResponseDTO>> GetPatientUserDataAsync(GetPatientUserRequestDTO requestData)
         {
             if (string.IsNullOrWhiteSpace(requestData.UserId))

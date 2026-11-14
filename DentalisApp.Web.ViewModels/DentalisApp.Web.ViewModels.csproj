@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DentalisApp.GCommon\DentalisApp.Common.csproj" />
+  </ItemGroup>
+
 </Project>

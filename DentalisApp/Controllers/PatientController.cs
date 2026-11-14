@@ -50,5 +50,55 @@ using static Common.Constants.ApplicationConstants;
            
             return View(patientViewModels);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            PatientCreateInputModel patientCreateInputModel = new PatientCreateInputModel();
+            
+            return View(patientCreateInputModel);
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(PatientCreateInputModel patientCreateInputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(patientCreateInputModel);
+            }
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            AddNewPatientRequestDTO addNewPatientRequestDTO = new AddNewPatientRequestDTO
+            {
+                EGN = patientCreateInputModel.EGN,
+                FirstName = patientCreateInputModel.FirstName,
+                SecondName = patientCreateInputModel.SecondName,
+                LastName = patientCreateInputModel.LastName,
+                Address = patientCreateInputModel.Address,
+                Phone = patientCreateInputModel.Phone,
+                Email = patientCreateInputModel.Email,
+                Allergies = patientCreateInputModel.Allergies,
+                MedicalHistory = patientCreateInputModel.MedicalHistory,
+                Notes = patientCreateInputModel.Notes,
+                DentistId = userId
+            };
+            bool isAdded = await patientService.AddPatientAsync(addNewPatientRequestDTO);
+
+            if (!isAdded)
+            {
+                ModelState.AddModelError(string.Empty, "There was an unexpected error with your request. Please contact us.");
+                return View(patientCreateInputModel);
+            }
+
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
