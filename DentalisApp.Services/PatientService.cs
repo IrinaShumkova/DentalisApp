@@ -58,6 +58,42 @@ namespace DentalisApp.Services
 
         }
 
+        public async Task<GetPatientDetailsResponseDTO?> GetPatientByIdAsync(int id)
+        {
+            Patient? patient = await dbContex.Patients.FindAsync(id);
+
+            GetPatientDetailsResponseDTO? patientDetailsResponse = null;
+
+            if (patient != null)
+            {
+                patientDetailsResponse = new GetPatientDetailsResponseDTO
+                {
+                    Id = patient.Id,
+                    EGN = patient.EGN,
+                    FirstName = patient.FirstName,
+                    SecondName = patient.SecondName,
+                    LastName = patient.LastName,
+                    Address = patient.Address,
+                    Phone = patient.Phone,
+                    Email = patient.Email,
+                    Allergies = patient.Allergies,
+                    MedicalHistory = patient.MedicalHistory,
+                    Notes = patient.Notes,
+                    IsActive = patient.IsActive
+                };
+            }
+            return patientDetailsResponse;
+        }
+
+        public Task<bool> IsPatientPublisherAsync(IsPatientPublishedRequestDTO requestData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsPatientSavedAsync(IsPatientSavedRequestDTO requestData)
+        {
+            throw new NotImplementedException();
+        }
         public async Task<IEnumerable<GetPatientUserResponseDTO>> GetPatientUserDataAsync(GetPatientUserRequestDTO requestData)
         {
             if (string.IsNullOrWhiteSpace(requestData.UserId))
@@ -84,5 +120,6 @@ namespace DentalisApp.Services
 
             return getUserPatientResponseDatas;
         }
+
     }
 }

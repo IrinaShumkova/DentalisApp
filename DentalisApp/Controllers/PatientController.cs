@@ -111,5 +111,40 @@ using static Common.Constants.ApplicationConstants;
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int id)
+        {
+            if(id <= 0)
+            {
+                return BadRequest("There was an error with your request! Try again!");
+            }   
+
+            GetPatientDetailsResponseDTO? patientResponseDTO = await patientService.GetPatientByIdAsync(id);
+
+            if (patientResponseDTO == null)
+            {
+                return NotFound("Patient not found.");
+            }
+
+            PatientDetailsViewModel patientViewModel = new PatientDetailsViewModel
+            {
+                Id = patientResponseDTO.Id,
+                EGN = patientResponseDTO.EGN,
+                FirstName = patientResponseDTO.FirstName,
+                SecondName = patientResponseDTO.SecondName,
+                LastName = patientResponseDTO.LastName,
+                Address = patientResponseDTO.Address,
+                Phone = patientResponseDTO.Phone,
+                Email = patientResponseDTO.Email,
+                Allergies = patientResponseDTO.Allergies,
+                MedicalHistory = patientResponseDTO.MedicalHistory,
+                Notes = patientResponseDTO.Notes,
+                IsActive = patientResponseDTO.IsActive
+            };
+
+            return View(patientViewModel);
+        }
+
     }
 }

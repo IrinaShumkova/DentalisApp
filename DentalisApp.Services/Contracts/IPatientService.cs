@@ -7,5 +7,11 @@ namespace DentalisApp.Services.Contracts
     {
         Task<IEnumerable<GetPatientUserResponseDTO>> GetPatientUserDataAsync(GetPatientUserRequestDTO requestData);
         Task<AddPatientResult> AddPatientAsync(AddNewPatientRequestDTO requestData);
+
+        Task<GetPatientDetailsResponseDTO?> GetPatientByIdAsync(int id);
+
+        Task<bool> IsPatientSavedAsync(IsPatientSavedRequestDTO requestData);
+
+        Task<bool> IsPatientPublisherAsync(IsPatientPublishedRequestDTO requestData);
     }
 }

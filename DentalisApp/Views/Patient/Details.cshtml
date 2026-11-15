@@ -1,0 +1,101 @@
+﻿@using DentalisApp.Web.ViewModels.Patient
+@model PatientDetailsViewModel
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Patient Details</h2>
+            <p class="text-muted">Patient information</p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Edit
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+                Back to Patients
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Personal Information</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <strong>Full Name:</strong>
+                    <p>@Model.FullName</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>EGN:</strong>
+                    <p>@Model.EGN</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Status:</strong>
+                    <p>
+                        @(Model.IsActive ? "Active" : "Inactive")
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Contact Information</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <strong>Phone:</strong>
+                    <p>@(Model.Phone ?? "Not provided")</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Email:</strong>
+                    <p>@(Model.Email ?? "Not provided")</p>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <strong>Address:</strong>
+                    <p>@(Model.Address ?? "Not provided")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Medical Information</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3">
+                <strong>Allergies:</strong>
+                <p>@(Model.Allergies ?? "Not provided")</p>
+            </div>
+
+            <div class="mb-3">
+                <strong>Medical History:</strong>
+                <p>@(Model.MedicalHistory ?? "Not provided")</p>
+            </div>
+
+            <div class="mb-3">
+                <strong>Notes:</strong>
+                <p>@(Model.Notes ?? "No notes")</p>
+            </div>
+        </div>
+    </div>
+
+</div>
