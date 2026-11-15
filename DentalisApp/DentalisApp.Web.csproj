@@ -24,6 +24,7 @@
     <ProjectReference Include="..\DentalisApp.Services.DTO\DentalisApp.Services.DTO.csproj" />
     <ProjectReference Include="..\DentalisApp.Services\DentalisApp.Services.csproj" />
     <ProjectReference Include="..\DentalisApp.Web.ViewModels\DentalisApp.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\Enums\Enum.Patient.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,9 +7,10 @@ namespace DentalisApp.Web.ViewModels.Patient
      public class PatientCreateInputModel
     {
             [Required]
-            [StringLength(PatientEGNLength)]
             [Display(Name = "EGN")]
-            public string EGN { get; set; } = null!;
+            [StringLength(PatientEGNLength, MinimumLength = PatientEGNLength,
+            ErrorMessage = "EGN must contain exactly 10 digits.")]
+             public string EGN { get; set; } = null!;
 
             [Required]
             [StringLength(PatientFirstNameMaxLength, MinimumLength = PatientFirstNameMinLength)]

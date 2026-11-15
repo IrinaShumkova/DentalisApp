@@ -3,6 +3,7 @@ using DentalisApp.Data.Models;
 using DentalisApp.Services.Contracts;
 using DentalisApp.Services.DTO.Patient.Request;
 using DentalisApp.Services.DTO.Patient.Response;
+using Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -19,9 +20,16 @@ namespace DentalisApp.Services
             this.logger = logger;
         }
 
-        public async Task<bool> AddPatientAsync(AddNewPatientRequestDTO requestData)
+        public async Task<AddPatientResult> AddPatientAsync(AddNewPatientRequestDTO requestData)
         {
-                Patient newPatient = new Patient
+            bool egnExists = await dbContex.Patients.AnyAsync(p => p.EGN == requestData.EGN);
+
+            if (egnExists)
+            {
+                return AddPatientResult.EgnAlreadyExists;
+            }
+
+            Patient newPatient = new Patient
                 {
                     EGN = requestData.EGN,
                     FirstName = requestData.FirstName,
@@ -39,14 +47,14 @@ namespace DentalisApp.Services
             {
                 await dbContex.Patients.AddAsync(newPatient);
                 await dbContex.SaveChangesAsync();
-                return true;
+                return AddPatientResult.Success;
             }
             catch (Exception e)
             {
                 logger.LogError(e, "An error occurred while adding a new patient.");
             }
       
-            return false;
+            return AddPatientResult.Failed;
 
         }
 

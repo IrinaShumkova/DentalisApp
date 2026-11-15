@@ -4,6 +4,8 @@ using DentalisApp.Services.DTO.Patient.Response;
 using DentalisApp.Web.ViewModels.Patient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Enums;
+
 
 namespace DentalisApp.Web.Controllers
 {
@@ -74,6 +76,7 @@ using static Common.Constants.ApplicationConstants;
                 return Unauthorized();
             }
 
+
             AddNewPatientRequestDTO addNewPatientRequestDTO = new AddNewPatientRequestDTO
             {
                 EGN = patientCreateInputModel.EGN,
@@ -88,15 +91,23 @@ using static Common.Constants.ApplicationConstants;
                 Notes = patientCreateInputModel.Notes,
                 DentistId = userId
             };
-            bool isAdded = await patientService.AddPatientAsync(addNewPatientRequestDTO);
+            AddPatientResult addPatientResult = await patientService.AddPatientAsync(addNewPatientRequestDTO);
 
-            if (!isAdded)
-            {
-                ModelState.AddModelError(string.Empty, "There was an unexpected error with your request. Please contact us.");
-                return View(patientCreateInputModel);
+            switch (addPatientResult)
+            {       
+                case AddPatientResult.Success:
+                    TempData["SuccessMessage"] = "Patient successfully registered!";
+                    return RedirectToAction(nameof(Index));
+
+                case AddPatientResult.EgnAlreadyExists:
+                    ModelState.AddModelError(nameof(patientCreateInputModel.EGN),"A patient with this EGN already exists.");
+                    return View(patientCreateInputModel);
+
+                case AddPatientResult.Failed:
+                    ModelState.AddModelError(string.Empty,"An error occurred while saving the patient.");
+                    return View(patientCreateInputModel);
             }
-
-
+          
             return RedirectToAction(nameof(Index));
         }
 

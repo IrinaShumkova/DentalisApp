@@ -3,6 +3,9 @@
     <Project Path="DentalisApp.Data.Models/DentalisApp.Data.Models.csproj" Id="1eb8f395-28a0-4766-baac-1707afac9188" />
     <Project Path="DentalisApp.Data/DentalisApp.Data.csproj" Id="b0ff23e8-dac2-48a0-bea5-29e5e5e98201" />
   </Folder>
+  <Folder Name="/Enums/">
+    <Project Path="Enums/Enum.Patient.csproj" Id="e3356fe4-9697-4120-92ca-ffa20d26b704" />
+  </Folder>
   <Folder Name="/Services/">
     <Project Path="DentalisApp.Services.DTO/DentalisApp.Services.DTO.csproj" Id="1f26897f-6ed1-434b-b837-dafba13ee548" />
     <Project Path="DentalisApp.Services/DentalisApp.Services.csproj" Id="08e99c70-0850-4660-adef-6377062d37ed" />

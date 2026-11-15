@@ -10,6 +10,7 @@
     <ProjectReference Include="..\DentalisApp.Data.Models\DentalisApp.Data.Models.csproj" />
     <ProjectReference Include="..\DentalisApp.Data\DentalisApp.Data.csproj" />
     <ProjectReference Include="..\DentalisApp.Services.DTO\DentalisApp.Services.DTO.csproj" />
+    <ProjectReference Include="..\Enums\Enum.Patient.csproj" />
   </ItemGroup>
 
 </Project>
