@@ -212,5 +212,39 @@ namespace DentalisApp.Services
                 })
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<GetPatientRemoveResponseDTO?> GetPatientForRemoveAsync(int id, string dentistId)
+        {
+            return await dbContex.Patients
+                    .Where(p => p.Id == id && p.DentistId == dentistId)
+                    .Select(p => new GetPatientRemoveResponseDTO
+                    {
+                        Id = p.Id,
+                        EGN = p.EGN,
+                        FirstName = p.FirstName,
+                        SecondName = p.SecondName,
+                        LastName = p.LastName,
+                        Phone = p.Phone
+                    })
+                    .FirstOrDefaultAsync();
+        }
+
+        public async Task<AddPatientResult> RemovePatientAsync(RemovePatientRequestDTO requestData, string dentistId)
+        {
+            Patient? patient = await dbContex.Patients
+                        .FirstOrDefaultAsync(p =>p.Id == requestData.Id && p.DentistId == dentistId);
+
+            if (patient == null)
+            {
+                return AddPatientResult.NotFound;
+            }
+
+            //patient.IsActive = false;
+
+            dbContex.Patients.Remove(patient);
+            await dbContex.SaveChangesAsync();
+
+            return AddPatientResult.Success;
+        }
     }
 }

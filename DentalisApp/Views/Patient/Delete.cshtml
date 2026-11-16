@@ -1,0 +1,70 @@
+﻿
+@using DentalisApp.Web.ViewModels.Patient;
+@model PatientDeleteViewModel
+
+@{
+    ViewData["Title"] = "Deactivate Patient";
+}
+
+<div class="container py-4">
+    <h2 class="mb-3">@ViewData["Title"]</h2>
+    <hr />
+
+    <div class="mx-auto" style="max-width: 860px;">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
+            <div class="card-header bg-dark text-white py-4">
+                <h3 class="h3 mb-1">@Model.FullName</h3>
+
+                <div class="small text-white-50">
+                    <span class="fw-semibold">Phone:</span>
+                    @(Model.Phone ?? "Not provided")
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="alert alert-warning rounded-3
+                            d-flex align-items-start gap-3 mb-0 border-0">
+
+                    <i class="fas fa-exclamation-triangle fs-4"></i>
+
+                    <div>
+                        <div class="fw-semibold">
+                            Are you sure you want to deactivate
+                            @Model.FullName?
+                        </div>
+
+                        <div class="small mt-1">
+                            The patient's records will remain in the database.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer d-flex justify-content-center gap-2 py-3">
+
+               <form asp-controller="Patient"
+                      asp-action="Delete"
+                      method="post">
+                    
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" asp-for="Id" />
+
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-user-minus"></i>
+                        Confirm Deactivation
+                    </button>
+                </form>
+
+                <a asp-controller="Patient"
+                   asp-action="MyPatients"
+                   class="btn btn-warning btn-sm">
+                    <i class="fas fa-times-circle"></i>
+                    Cancel
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -277,5 +277,60 @@ using static Common.Constants.ApplicationConstants;
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+                return Unauthorized();
+
+            GetPatientRemoveResponseDTO? patient = await patientService.GetPatientForRemoveAsync(id, userId);
+
+            if (patient == null)
+                return NotFound();
+
+            PatientDeleteViewModel model = new PatientDeleteViewModel
+            {
+                Id = patient.Id,
+                EGN = patient.EGN,
+                FullName = patient.FullName,
+                Phone = patient.Phone
+            };
+
+            return View(model);
+        }
+       
+        [HttpPost]
+        public async Task<IActionResult> Delete(PatientDeleteViewModel model)
+        {
+            string? userId = GetUserId();
+
+            if (userId == null)
+                return Unauthorized();
+
+            RemovePatientRequestDTO requestData =
+                new RemovePatientRequestDTO
+                {
+                    Id = model.Id
+                };
+
+            AddPatientResult result = await patientService.RemovePatientAsync(requestData, userId);
+
+            switch (result)
+            {
+                case AddPatientResult.Success:
+                    TempData["SuccessMessage"] =
+                        "Patient deactivated successfully.";
+
+                    return RedirectToAction(nameof(MyPatients));
+
+                case AddPatientResult.NotFound:
+                    return NotFound();
+
+                default:
+                    return View("Error");
+            }
+        }
     }
 }
