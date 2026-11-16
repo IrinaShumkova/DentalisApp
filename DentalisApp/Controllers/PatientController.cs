@@ -21,6 +21,7 @@ using static Common.Constants.ApplicationConstants;
         }
 
         [HttpGet]
+        
         public async Task<IActionResult> Index()
         {
             string? userId = GetUserId();
@@ -30,7 +31,7 @@ using static Common.Constants.ApplicationConstants;
             }
 
             IEnumerable<GetPatientUserResponseDTO> patientData 
-            = await patientService.GetPatientUserDataAsync(new GetPatientUserRequestDTO { UserId = userId });
+            = await patientService.GetPatientAllDataAsync(new GetPatientUserRequestDTO { UserId = userId });
 
             ICollection<PatientIndexViewModel> patientViewModels = new List<PatientIndexViewModel>();
 
@@ -51,6 +52,38 @@ using static Common.Constants.ApplicationConstants;
             }
            
             return View(patientViewModels);
+        }
+        [HttpGet]
+        public async Task<IActionResult> MyPatients()
+        {
+            string? userId = GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            IEnumerable<GetMyPatientsResponseDTO> patientData
+            = await patientService.GetPatientUserDataAsync(new GetPatientUserRequestDTO { UserId = userId });
+
+            ICollection<AllMyPatientsViewModel> myPatientsViewModels = new List<AllMyPatientsViewModel>();
+
+            foreach (GetMyPatientsResponseDTO patient in patientData)
+            {
+                AllMyPatientsViewModel patientiewModel = new AllMyPatientsViewModel
+                {
+                    Id = patient.Id,
+                    IsActive = patient.IsActive,
+                    EGN = patient.EGN,
+                    FirstName = patient.FirstName,
+                    SecondName = patient.SecondName,
+                    LastName = patient.LastName,
+                    Phone = patient.Phone,
+                    Email = patient.Email
+                };
+                myPatientsViewModels.Add(patientiewModel);
+            }
+
+            return View(myPatientsViewModels);
         }
 
         [HttpGet]

@@ -5,7 +5,9 @@ namespace DentalisApp.Services.Contracts
 {
     public interface IPatientService
     {
-        Task<IEnumerable<GetPatientUserResponseDTO>> GetPatientUserDataAsync(GetPatientUserRequestDTO requestData);
+        Task<IEnumerable<GetPatientUserResponseDTO>> GetPatientAllDataAsync(GetPatientUserRequestDTO requestData);
+
+        Task<IEnumerable<GetMyPatientsResponseDTO>> GetPatientUserDataAsync(GetPatientUserRequestDTO requestData);
         Task<AddPatientResult> AddPatientAsync(AddNewPatientRequestDTO requestData);
 
         Task<GetPatientDetailsResponseDTO?> GetPatientByIdAsync(int id);

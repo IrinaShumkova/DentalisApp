@@ -94,7 +94,7 @@ namespace DentalisApp.Services
         {
             throw new NotImplementedException();
         }
-        public async Task<IEnumerable<GetPatientUserResponseDTO>> GetPatientUserDataAsync(GetPatientUserRequestDTO requestData)
+        public async Task<IEnumerable<GetPatientUserResponseDTO>> GetPatientAllDataAsync(GetPatientUserRequestDTO requestData)
         {
             if (string.IsNullOrWhiteSpace(requestData.UserId))
             {
@@ -102,7 +102,6 @@ namespace DentalisApp.Services
             }
 
           IEnumerable<GetPatientUserResponseDTO> getUserPatientResponseDatas =  await dbContex.Patients
-                .Where(p => p.DentistId.ToLower() == requestData.UserId.ToLower())
                 .Select(p => new GetPatientUserResponseDTO
                 {
                     Id = p.Id,
@@ -115,11 +114,40 @@ namespace DentalisApp.Services
                     Email = p.Email
 
                 })
-                .OrderBy(p => p.Id)
+                .OrderBy(p => p.FirstName)
+                .ThenBy(p => p.SecondName)
+                .ThenBy(p => p.LastName)
                 .ToArrayAsync();
 
             return getUserPatientResponseDatas;
         }
 
+        public async Task<IEnumerable<GetMyPatientsResponseDTO>> GetPatientUserDataAsync(GetPatientUserRequestDTO requestData)
+        {
+            if (string.IsNullOrWhiteSpace(requestData.UserId))
+            {
+                throw new ArgumentException("UserId cannot be null or empty.", nameof(requestData.UserId));
+            }
+
+            IEnumerable<GetMyPatientsResponseDTO> getMyPatientsResponseDatas = await dbContex.Patients
+                  .Where(p => p.DentistId.ToLower() == requestData.UserId.ToLower())
+                  .Select(p => new GetMyPatientsResponseDTO
+                  {
+                      Id = p.Id,
+                      IsActive = p.IsActive,
+                      FirstName = p.FirstName,
+                      SecondName = p.SecondName,
+                      LastName = p.LastName,
+                      EGN = p.EGN,
+                      Phone = p.Phone,
+                      Email = p.Email
+                  })
+                  .OrderBy(p => p.FirstName)
+                  .ThenBy(p => p.SecondName)
+                  .ThenBy(p => p.LastName)
+                  .ToArrayAsync();
+
+            return getMyPatientsResponseDatas;
+        }
     }
 }
