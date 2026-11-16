@@ -11,6 +11,9 @@ namespace DentalisApp.Services.Contracts
         Task<AddPatientResult> AddPatientAsync(AddNewPatientRequestDTO requestData);
 
         Task<GetPatientDetailsResponseDTO?> GetPatientByIdAsync(int id);
+        Task<GetPatientDetailsResponseDTO?> GetPatientByIdAsync(int id, string dentistId);
+
+        Task<AddPatientResult> UpdatePatientAsync(UpdatePatientRequestDTO requestData,string dentistId);
 
         Task<bool> IsPatientSavedAsync(IsPatientSavedRequestDTO requestData);
 

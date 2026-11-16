@@ -13,6 +13,8 @@ namespace DentalisApp.Services.DTO.Patient.Response
         public string LastName { get; set; } = null!;
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        
+
+        public string DentistId { get; set; } = null!;
+
     }
 }

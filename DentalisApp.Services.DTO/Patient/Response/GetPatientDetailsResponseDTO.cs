@@ -26,5 +26,7 @@ namespace DentalisApp.Services.DTO.Patient.Response
         public string? Notes { get; set; }
 
         public bool IsActive { get; set; }
+
+        public string DentistId { get; set; } = null!;
     }
 }

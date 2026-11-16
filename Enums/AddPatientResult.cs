@@ -4,6 +4,8 @@
     {
         Success,
         EgnAlreadyExists,
-        Failed
+        Failed,
+        NotFound,
+        NotAuthorized
     }
 }

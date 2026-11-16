@@ -2,9 +2,10 @@
 using DentalisApp.Services.DTO.Patient.Request;
 using DentalisApp.Services.DTO.Patient.Response;
 using DentalisApp.Web.ViewModels.Patient;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace DentalisApp.Web.Controllers
@@ -177,6 +178,103 @@ using static Common.Constants.ApplicationConstants;
             };
 
             return View(patientViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+             string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            GetPatientDetailsResponseDTO? patient = await patientService.GetPatientByIdAsync(id, userId);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            PatientEditViewModel model = new PatientEditViewModel
+            {
+                Id = patient.Id,
+                EGN = patient.EGN,
+                FirstName = patient.FirstName,
+                SecondName = patient.SecondName,
+                LastName = patient.LastName,
+                Address = patient.Address,
+                Phone = patient.Phone,
+                Email = patient.Email,
+                Allergies = patient.Allergies,
+                MedicalHistory = patient.MedicalHistory,
+                Notes = patient.Notes,
+                IsActive = patient.IsActive
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PatientEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            string? userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            UpdatePatientRequestDTO requestData = new UpdatePatientRequestDTO
+            {
+                Id = model.Id,
+                EGN = model.EGN,
+                FirstName = model.FirstName,
+                SecondName = model.SecondName,
+                LastName = model.LastName,
+                Address = model.Address,
+                Phone = model.Phone,
+                Email = model.Email,
+                Allergies = model.Allergies,
+                MedicalHistory = model.MedicalHistory,
+                Notes = model.Notes,
+                IsActive = model.IsActive
+            };
+
+            AddPatientResult result = await patientService.UpdatePatientAsync(
+                requestData, userId);
+
+            switch (result)
+            {
+                case AddPatientResult.Success:
+                    TempData["SuccessMessage"] =
+                        "Patient updated successfully.";
+
+                    return RedirectToAction(nameof(MyPatients));
+
+                case AddPatientResult.EgnAlreadyExists:
+                    ModelState.AddModelError(
+                        nameof(model.EGN),
+                        "A patient with this EGN already exists.");
+
+                    return View(model);
+
+                case AddPatientResult.NotAuthorized:
+                    return Forbid();
+
+                case AddPatientResult.NotFound:
+                    return NotFound();
+
+                default:
+                    return View("Error");
+
+            }
         }
 
     }

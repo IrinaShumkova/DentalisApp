@@ -6,6 +6,7 @@ namespace DentalisApp.Services.DTO.Patient.Request
     public class AddNewPatientRequestDTO
     {
         public string EGN { get; set; } = null!;
+        public bool IsActive { get; set; } = true;
 
         public string FirstName { get; set; } = null!;
 

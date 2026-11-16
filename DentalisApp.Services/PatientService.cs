@@ -4,6 +4,7 @@ using DentalisApp.Services.Contracts;
 using DentalisApp.Services.DTO.Patient.Request;
 using DentalisApp.Services.DTO.Patient.Response;
 using Enums;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -32,6 +33,7 @@ namespace DentalisApp.Services
             Patient newPatient = new Patient
                 {
                     EGN = requestData.EGN,
+                    IsActive = requestData.IsActive,
                     FirstName = requestData.FirstName,
                     SecondName = requestData.SecondName,
                     LastName = requestData.LastName,
@@ -79,7 +81,8 @@ namespace DentalisApp.Services
                     Allergies = patient.Allergies,
                     MedicalHistory = patient.MedicalHistory,
                     Notes = patient.Notes,
-                    IsActive = patient.IsActive
+                    IsActive = patient.IsActive,
+                    DentistId = patient.DentistId
                 };
             }
             return patientDetailsResponse;
@@ -111,7 +114,8 @@ namespace DentalisApp.Services
                     LastName = p.LastName,
                     EGN = p.EGN,
                     Phone = p.Phone,
-                    Email = p.Email
+                    Email = p.Email,
+                    DentistId = p.DentistId
 
                 })
                 .OrderBy(p => p.FirstName)
@@ -140,7 +144,8 @@ namespace DentalisApp.Services
                       LastName = p.LastName,
                       EGN = p.EGN,
                       Phone = p.Phone,
-                      Email = p.Email
+                      Email = p.Email,
+                      DentistId = p.DentistId
                   })
                   .OrderBy(p => p.FirstName)
                   .ThenBy(p => p.SecondName)
@@ -148,6 +153,64 @@ namespace DentalisApp.Services
                   .ToArrayAsync();
 
             return getMyPatientsResponseDatas;
+        }
+
+        public async Task<AddPatientResult> UpdatePatientAsync(UpdatePatientRequestDTO requestData, string dentistId)
+        {
+            Patient? patient = await dbContex.Patients.FirstOrDefaultAsync(p =>p.Id == requestData.Id &&
+            p.DentistId == dentistId);
+
+            if (patient == null)
+            {
+                return AddPatientResult.NotAuthorized;
+            }
+
+            bool egnExists = await dbContex.Patients
+                .AnyAsync(p =>p.EGN == requestData.EGN && p.Id != requestData.Id);
+
+            if (egnExists)
+                return AddPatientResult.EgnAlreadyExists;
+
+            patient.Id = requestData.Id;
+            patient.IsActive = requestData.IsActive;
+            patient.EGN = requestData.EGN;
+            patient.FirstName = requestData.FirstName;
+            patient.SecondName = requestData.SecondName;
+            patient.LastName = requestData.LastName;
+            patient.Address = requestData.Address;
+            patient.Phone = requestData.Phone;
+            patient.Email = requestData.Email;
+            patient.Allergies = requestData.Allergies;
+            patient.MedicalHistory = requestData.MedicalHistory;
+            patient.Notes = requestData.Notes;
+            patient.DentistId = dentistId;
+
+            await dbContex.SaveChangesAsync();
+
+            return AddPatientResult.Success;
+        }
+
+        public async Task<GetPatientDetailsResponseDTO?> GetPatientByIdAsync(int id, string dentistId)
+        {
+            return await dbContex.Patients
+                .Where(p => p.Id == id && p.DentistId == dentistId)
+                .Select(p => new GetPatientDetailsResponseDTO
+                {
+                    Id = p.Id,
+                    EGN = p.EGN,
+                    FirstName = p.FirstName,
+                    SecondName = p.SecondName,
+                    LastName = p.LastName,
+                    Address = p.Address,
+                    Phone = p.Phone,
+                    Email = p.Email,
+                    Allergies = p.Allergies,
+                    MedicalHistory = p.MedicalHistory,
+                    Notes = p.Notes,
+                    IsActive = p.IsActive,
+                    DentistId = p.DentistId
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

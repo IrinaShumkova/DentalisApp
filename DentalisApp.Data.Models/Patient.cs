@@ -11,13 +11,8 @@
         public bool IsActive { get; set; } = true;
 
         [Required]
-        //[StringLength(PatientEGNLength, MinimumLength =PatientEGNLength)]
-        [StringLength(10, MinimumLength = 10,
-    ErrorMessage = "EGN must contain exactly 10 digits.")]
-        [RegularExpression(@"^\d{10}$",
-    ErrorMessage = "EGN must contain only digits.")]
+        [StringLength(PatientEGNLength, MinimumLength =PatientEGNLength)]
         public string EGN { get; set; } = null!;
-
 
         [Required]
         [MaxLength(PatientFirstNameMaxLength)]
